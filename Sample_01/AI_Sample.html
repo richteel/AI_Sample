@@ -1,0 +1,70 @@
+<html>
+<body>
+Detect the scene in this file: <input id="image" type="file" />
+<input type="button" value="Detect Scene" onclick="detectScene(image)" />
+
+<script>
+function detectScene(fileChooser) {
+    var formData = new FormData();
+    formData.append('image', fileChooser.files[0]);
+	//if(img0)
+	//	img0.src = fileChooser.files[0];
+
+	/*
+		API REF: https://www.codeproject.com/AI/docs/api/api_reference.html
+		
+		http://localhost:5000/v1/vision/detect/scene		NG 404	Wrong URL?
+		http://localhost:32168/v1/vision/detect/scene		NG 404	/v1/vision/scene?
+		http://localhost:32168/v1/vision/detection 			OK
+		http://localhost:32168/v1/image/removebackground	NG 404	Not Available
+		http://localhost:32168/v1/image/cartoonise			OK
+		http://localhost:32168/v1/image/superresolution		NG 404	OK after installing Super Resolution
+		http://localhost:32168/v1/image/portraitfilter		NG 404	Not Available
+		http://localhost:32168/v1/vision/custom/list		OK
+			0: "ipcam-combined"
+			1: "actionnetv2"
+			2: "license-plate"
+			3: "ipcam-dark"
+			4: "ipcam-general"
+			5: "ipcam-animal"
+		http://localhost:32168/v1/vision/custom/model-name
+			http://localhost:32168/v1/vision/custom/ipcam-combined	OK
+			http://localhost:32168/v1/vision/custom/actionnetv2		OK
+			http://localhost:32168/v1/vision/custom/license-plate	OK
+			http://localhost:32168/v1/vision/custom/ipcam-dark		OK
+			http://localhost:32168/v1/vision/custom/ipcam-general	OK
+			http://localhost:32168/v1/vision/custom/ipcam-animal	OK
+		http://localhost:32168/v1/vision/scene				OK
+		http://localhost:32168/v1/vision/face				OK
+		http://localhost:32168/v1/vision/face/register		OK
+		http://localhost:32168/v1/vision/face/list			OK
+		http://localhost:32168/v1/vision/face/delete		OK
+		http://localhost:32168/v1/vision/face/recognize		OK
+		http://localhost:32168/v1/vision/face/match			OK
+		http://localhost:32168/v1/image/alpr				NG 404	OK after installing License Plate Reader
+		http://localhost:32168/v1/image/ocr					NG 404	OK after installing Optical Character Recognition
+		http://localhost:32168/v1/text/sentiment			NG 404	Not Available
+		http://localhost:32168/v1/text/summarize			NG 404	OK after installing Text Summary
+		
+	*/
+    fetch('http://localhost:32168/v1/text/summarize', {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) response.json().then(data => {
+			console.dir(data)
+            // console.log(`Scene is ${data.label}, ${data.confidence} confidence`)
+			if(img1 && data.imageBase64)
+				img1.src = "data:image/png;base64," + data.imageBase64;
+        });
+    });
+}
+</script>
+<br />
+<img id="img0" />
+<br />
+<img id="img1" />
+<br />
+</body>
+</html>
